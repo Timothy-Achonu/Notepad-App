@@ -78,8 +78,9 @@
     font-size: 1rem;
   }
   .sidebarHeader button {
-    
     margin-left: 2px;
-
+  }
+  .titleDelete {
+    display: block;
   }
 }
