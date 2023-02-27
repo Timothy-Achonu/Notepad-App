@@ -11,9 +11,46 @@ header {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    min-height: 10vh;
+    align-items: center;
+    min-height: 15vh;
     background-color: #f9f9f9;
     padding: 10px;
+}
+header > div {
+    cursor: pointer;
+    height: fit-content;   
+    padding: 5px;
+    /* border-radius: 50%; */
+    /* background-color: #fff; */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+header > .fontSize {
+    width: fit-content;
+    align-items: center;
+}
+header > .fontSize > span {
+    border: 1px #aaa solid;
+    min-width: 30px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+header > .fontSize > span:nth-child(2) {
+    cursor: default;
+}
+header > div.active {
+    background-color: #aaa;
+    /* color: white; */
+}
+header > div.italics {
+    font-style: italic;
 }
 
 select {
@@ -28,5 +65,8 @@ textarea {
     padding: 20px;
     border-color: #c8ccd0;
     outline-color: #c8ccd0;
-      /* background-color: #c8ccd0; */
+    font-weight: 100;
+}
+textarea.italics {
+    font-style: italic;
 }

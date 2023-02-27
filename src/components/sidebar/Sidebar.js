@@ -1,12 +1,14 @@
 import React from "react";
 import styles from "./sidebar.module.css";
+import trashIcon from "../assets/images/trash.png";
+import whiteTrash from "../assets/images/whiteTrash.png";
 
 class Sidebar extends React.Component {
-//   constructor(props) {
-//     super(props);
-//   }
+  //   constructor(props) {
+  //     super(props);
+  //   }
   noteElements = () => {
-    let noteElements = this.props.notes.map((note, index) => {
+    let noteElements = this.props.notes.map((note) => {
       return (
         <div key={note.id}>
           <div
@@ -15,7 +17,22 @@ class Sidebar extends React.Component {
             }`}
             onClick={() => this.props.setCurrentNoteId(note.id)}
           >
-            <h4 className="text-snippet">Note {index + 1}</h4>
+            <h4 className={styles.textSnippet}>{note.body.split("\n")[0]}</h4>
+            {note.id === this.props.currentNoteId ? (
+              <button
+                className={styles.titleDelete}
+                onClick={(event) => this.props.deleteNote(event, note.id)}
+              >
+                <img src={trashIcon} className="gg-trash trash-icon" alt="trash"/>
+              </button>
+            ) : (
+              <button
+                className={styles.titleDelete}
+                onClick={(event) => this.props.deleteNote(event, note.id)}
+              >
+                <img src={whiteTrash} className="gg-trash trash-icon" alt="trash"/>
+              </button>
+            )}
           </div>
         </div>
       );

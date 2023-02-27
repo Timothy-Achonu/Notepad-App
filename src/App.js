@@ -7,18 +7,22 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: [],
+      notes: JSON.parse(localStorage.getItem("notes")) || [],
     };
     this.state.currentNoteId = this.state.notes[0]?.id || "";
     // console.log(this.state);
     // console.log('In App constructor')
   }
 
+  componentDidUpdate() {
+    localStorage.setItem("notes", JSON.stringify(this.state.notes));
+  }
+
   createNewNote = () => {
     const newNote = {
       // id: nanoid(),
-      id: this.state.notes.length+1,
-      body: "# Type your markdown note's title here",
+      id: this.state.notes.length + 1,
+      body: "# Type your note's title here",
     };
     this.setState((prevState) => {
       return {
@@ -26,23 +30,49 @@ class App extends React.Component {
         currentNoteId: newNote.id,
       };
     });
-  }
+  };
 
+  /*
+  instead passing this.state to change the font family
+  pass a function that sets the state.
+  */
 
   //update note
-  updateNote= (text) =>  {
-    let updatedNotes = this.state.notes.map((oldNote) => {
-      return oldNote.id === this.state.currentNoteId
-        ? { ...oldNote, body: text }
-        : oldNote;
-    });
+  updateNote = (text) => {
+    let updatedNotes = [];
+    let oldNotes = this.state.notes;
+    let currentNoteId = this.state.currentNoteId;
+    for (let i = 0; i < oldNotes.length; i++) {
+      const oldNote = oldNotes[i];
+      if (oldNote.id === currentNoteId) {
+        updatedNotes.unshift({ ...oldNote, body: text });
+      } else {
+        updatedNotes.push(oldNote);
+      }
+    }
     this.setState((prevState) => {
       return {
         ...prevState,
         notes: updatedNotes,
       };
     });
-  }
+  };
+
+  deleteNote = (event, noteId) => {
+    event.stopPropagation();
+    console.log("deleted note", noteId);
+    //setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+    let newNotes = this.state.notes.filter((note) => (
+      note.id !== noteId
+    ));
+    console.log(newNotes);
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        notes: newNotes,
+      };
+    });
+  };
 
   //Find current note
 
@@ -52,7 +82,7 @@ class App extends React.Component {
         return note.id === this.state.currentNoteId;
       }) || this.state.notes[0]
     );
-  }
+  };
 
   setCurrentNoteId = (newId) => {
     this.setState((prevState) => {
@@ -61,8 +91,7 @@ class App extends React.Component {
         currentNoteId: newId,
       };
     });
-  }
-
+  };
 
   render() {
     return (
@@ -75,10 +104,11 @@ class App extends React.Component {
               currentNoteId={this.state.currentNoteId}
               setCurrentNoteId={this.setCurrentNoteId}
               newNote={this.createNewNote}
+              deleteNote={this.deleteNote}
             />
-            <Editor 
-                currentNote={this.findCurrentNote()} 
-                updateNote={this.updateNote} 
+            <Editor
+              currentNote={this.findCurrentNote()}
+              updateNote={this.updateNote}
             />
           </div>
         ) : (
@@ -95,4 +125,3 @@ class App extends React.Component {
 }
 
 export default App;
-
